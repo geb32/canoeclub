@@ -107,13 +107,23 @@ public class MainMenu extends JFrame implements ActionListener
     try {
     	CsvReader members = new CsvReader("members.csv");
         members.readHeaders();
+	
+	int rowNum = 0;
+	
     	while (members.readRecord()){
+	rowNum++;
     	String usernamecsv = members.get("username");
     	String passcsv = members.get("password");
-    	if(usernamecsv.equals(username.getText()) && passcsv.equals(password.getText())){
-    		dispose();
-    		AdminMenuWin test = new AdminMenuWin();
-    		
+    	if(members.get("memberId") == userinput){
+	
+    		CSVReader reader2 = new CSVReader(new FileReader("members.csv"));
+                List<String[]> allMembers = reader2.readAll();
+                allElements.remove(rowNum);
+                FileWriter sw = new FileWriter(filelocation);
+                CSVWriter writer = new CSVWriter(sw);
+                writer.writeAll(allElements);
+                writer.close();
+    		reader2.close();
     	}
     	else{
     		System.out.println("broke");
