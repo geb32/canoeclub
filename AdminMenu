@@ -1,0 +1,128 @@
+package main;
+
+import java.awt.*;
+
+import javax.swing.JFrame;
+import javax.swing.JOptionPane;
+import javax.swing.JTextField;
+import javax.swing.JButton;
+
+import java.awt.event.ActionListener;
+import java.awt.event.ActionEvent;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+
+import javax.swing.JList;
+import javax.swing.JTable;
+import java.io.*;
+import javax.swing.JTextArea;
+import com.opencsv.CSVReader;
+import javax.swing.JScrollBar;
+import javax.swing.JScrollPane;
+
+public class AdminMenuWin {
+
+	private JFrame frame;
+
+	/**
+	 * Create the application.
+	 */
+	public AdminMenuWin() {
+		initialize();
+		
+	}
+
+	/**
+	 * Initialize the contents of the frame.
+	 */
+	private void initialize() {
+		frame = new JFrame();
+		frame.setBounds(600, 300, 500, 500);
+		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		frame.getContentPane().setLayout(null);
+		
+		JButton create = new JButton("Create Member");
+		create.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				frame.setVisible(false);
+				AdminCreationWin test = new AdminCreationWin();
+		}
+		});
+		create.setBounds(56, 314, 137, 38);
+		frame.getContentPane().add(create);
+		
+		
+		JTextArea membersList = new JTextArea();
+		membersList.setBounds(10, 11, 437, 283);
+		JScrollPane scrollPane = new JScrollPane(membersList);
+		scrollPane.setBounds(10, 11, 437, 283);
+		frame.getContentPane().add(scrollPane);
+		
+		
+		JButton update = new JButton("Update");
+		update.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+		        try {
+                	FileReader csvreader = new FileReader("members.csv");
+                    BufferedReader bufferedreader = new BufferedReader(csvreader);
+                    String line = "";
+                    String contents = "";
+                    
+                    while ((line = bufferedreader.readLine()) != null) {
+                    	contents = contents + line + "\n";
+                    }
+                    membersList.setText(contents);
+					bufferedreader.close();
+					
+				} catch (IOException d) {
+					// TODO Auto-generated catch block
+					d.printStackTrace();
+					
+				}
+       
+                
+			}
+			});
+		update.setBounds(203, 314, 109, 38);
+		frame.getContentPane().add(update);
+		
+		JButton delete = new JButton("Delete Member");
+		delete.setBounds(56, 412, 137, 38);
+		frame.getContentPane().add(delete);
+		
+		JButton search = new JButton("Search");
+		search.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+			}
+		});
+		search.setBounds(56, 363, 137, 38);
+		frame.getContentPane().add(search);
+		
+		JButton logout = new JButton("Logout");
+		logout.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				frame.setVisible(false);
+				new MainMenu("CanoeClub system").setVisible(true);
+			}
+		});
+		logout.setBounds(203, 363, 109, 38);
+		frame.getContentPane().add(logout);
+		
+		frame.setVisible(true);
+		frame.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+	    frame.addWindowListener(new WindowAdapter() {
+	        @Override
+	        public void windowClosing(WindowEvent we)
+	        { 
+	        	int QuitCanoe; 
+	            
+	            QuitCanoe=JOptionPane.showConfirmDialog(null,"Are you sure you wish to close this program?","CanoeClub System",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE); 
+	             
+	            if (QuitCanoe==JOptionPane.YES_OPTION) 
+	            { 
+	                  System.exit(0); 
+	            }
+	        }
+	    }); 
+	}
+}
