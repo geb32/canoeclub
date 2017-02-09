@@ -129,7 +129,31 @@ public class MainMenu extends JFrame implements ActionListener
     		System.out.println("broke");
     	}
     	}
+    	
+	EDIT FUNCTION MAKE EDIT FUNCTION REQUIRE CORRECT USER INPUT TO BE PUT IN (E.G. HAVE AN EDIT PAGE
+	Boolean idfound = false;
+	HAVE FIND MEMBER BUTTON WHICH IS THE SAME AS SEARCH HOWEVER, THE INFORMATION GOES INTO EDITIABLE TEXT FIELDS WHEN EDIT BUTTON
+	IS PRESSED THE FOLLOWING CODE RUNS!
+	while(members.readRecord());{
+	if(members.get("memberId") == userinput){
+		idfound = true;
+    		CSVReader reader2 = new CSVReader(new FileReader("members.csv"));
+                List<String[]> allMembers = reader2.readAll();
+                allElements.remove(rowNum);
+                FileWriter sw = new FileWriter(filelocation);
+                CSVWriter writer = new CSVWriter(sw);
+                writer.write(ENTER CODE FOR CREATING ACCOUNT)
+                writer.close();
+    		reader2.close();
+    	}
+    	else{
     		
+    	}
+	}
+	if(idfound == false){
+		JOptionPane.showMessageDialog(null,"Invalid member Id","CanoeClub System",JOptionPane.INFORMATION_MESSAGE); 
+	}
+	
     	members.close();
     	
     
