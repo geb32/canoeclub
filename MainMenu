@@ -1,0 +1,166 @@
+package main; 
+
+import java.awt.*; 
+import java.awt.event.*;
+import javax.swing.*; 
+import java.io.*;
+import java.util.Arrays;
+import java.util.ArrayList;
+import java.util.List;
+import com.csvreader.CsvReader;
+public class MainMenu extends JFrame implements ActionListener
+{
+	JLabel label1 = new JLabel("username");
+    JLabel label2 = new JLabel("password");
+    JTextField username = new JTextField(9);
+    JTextField password = new JTextField(9);
+    JButton login = new JButton("login");
+    JButton createAcc = new JButton("create account");
+    JMenuBar mainbar = new JMenuBar();
+    JMenu file = new JMenu("File"); 
+    JMenu help = new JMenu("Help"); 
+    JMenuItem loginnecc = new JMenuItem("Why login is neccessary");
+    JMenuItem about = new JMenuItem("About");
+    JMenuItem exitprog = new JMenuItem("Exit the program");
+    JMenuItem createaccmenu = new JMenuItem("Create a new member");
+    
+  public MainMenu(String title)                           
+  { 
+	//Sets size and location (for when the logout button is pressed in admin menu)
+	setLocation(600,300);
+	setSize(500,500);
+	  
+    //Adds a menu to the top of the page
+	file.add(createaccmenu);
+	file.add(exitprog);
+	mainbar.add(file);
+	help.add(loginnecc);
+	help.add(about);
+	mainbar.add(help);
+	setJMenuBar(mainbar);
+	
+	
+	//adds actions listeners
+    login.addActionListener(this);
+    createAcc.addActionListener(this);
+    createaccmenu.addActionListener(this);
+    exitprog.addActionListener(this);
+    loginnecc.addActionListener(this);
+    about.addActionListener(this);
+    password.addActionListener(this);
+    
+    //Sets out the MainMenu 
+    setLayout( new FlowLayout() ); 
+    JPanel p = new JPanel(new GridBagLayout());
+    GridBagConstraints c = new GridBagConstraints();
+    
+    //
+    c.fill = GridBagConstraints.HORIZONTAL;
+    c.ipady = 10;      
+    c.ipadx = 40;
+    c.anchor = GridBagConstraints.PAGE_END; 
+    c.insets = new Insets(10,0,0,0); 
+
+    c.weightx = 1.2;   
+    c.weighty = 1.2;  
+    
+    
+    c.gridx = 0;
+    c.gridy = 2;
+    p.add(label2, c);
+    c.gridx = 1;
+    c.gridy = 2;
+    p.add(password, c);
+    c.gridx = 0;
+    c.gridy = 1;
+    p.add(label1, c);
+    c.gridx = 1;
+    c.gridy = 1;
+    p.add(username, c);
+    c.gridx = 1;
+    c.gridy = 3;
+    p.add(login, c);
+    add(p);
+    //Asks for a confirmation before closing the program
+    this.setDefaultCloseOperation(JFrame.DO_NOTHING_ON_CLOSE);
+    addWindowListener(new WindowAdapter() {
+        @Override
+        public void windowClosing(WindowEvent we)
+        { 
+        	int QuitCanoe; 
+            
+            QuitCanoe=JOptionPane.showConfirmDialog(null,"Are you sure you wish to close this program?","CanoeClub System",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE); 
+             
+            if (QuitCanoe==JOptionPane.YES_OPTION) 
+            { 
+                  System.exit(0); 
+            }
+        }
+    }); 
+  }
+
+  public void actionPerformed( ActionEvent evt)
+  {
+	if(evt.getSource() == login || evt.getSource() == password)  {
+    // check which command has been sent
+	
+    try {
+    	CsvReader members = new CsvReader("members.csv");
+        members.readHeaders();
+    	while (members.readRecord()){
+    	String usernamecsv = members.get("username");
+    	String passcsv = members.get("password");
+    	if(usernamecsv.equals(username.getText()) && passcsv.equals(password.getText())){
+    		dispose();
+    		AdminMenuWin test = new AdminMenuWin();
+    		
+    	}
+    	else{
+    		System.out.println("broke");
+    	}
+    	}
+    		
+    	members.close();
+    	
+    
+    	}
+    	catch(FileNotFoundException ee){
+    		ee.printStackTrace();
+    		System.out.println("broke");
+    	}
+    	catch(IOException e){
+    	
+    	}
+    }
+    else if(evt.getSource() == about) {
+    	JOptionPane.showMessageDialog(null,"This program was created at Coventry University College","CanoeClub System",JOptionPane.INFORMATION_MESSAGE); 
+    }
+    else if(evt.getSource() == exitprog) {
+    	int QuitCanoe; 
+        
+        QuitCanoe=JOptionPane.showConfirmDialog(null,"Are you sure you wish to close this program?","CanoeClub System",JOptionPane.YES_NO_OPTION,JOptionPane.WARNING_MESSAGE); 
+         
+        if (QuitCanoe==JOptionPane.YES_OPTION) 
+        { 
+              System.exit(0); 
+        }
+    }
+    else if(evt.getSource() == createAcc || evt.getSource() == createaccmenu){
+    	dispose();
+    	NonAdminCreationWin nonadcreate = new NonAdminCreationWin();
+    }
+    else if(evt.getSource() == loginnecc){
+    
+    }
+  }
+    
+
+  public static void main ( String[] args )
+  {
+    MainMenu demo  = new MainMenu( "Canoe Club Login Page" ) ;
+    demo.setLocation(600,300); 
+    demo.setSize( 500, 500 );     
+    demo.setVisible( true );
+
+  }
+}
